@@ -2,6 +2,7 @@ import pygame
 import math
 
 
+
 #setup
 pygame.init()
 WIDTH, HEIGHT =800, 500
@@ -23,6 +24,7 @@ for i in range(26):
 
 #fonts
 LETTER_FONT = pygame.font.SysFont('comicsans', 40)
+WORD_FONT = pygame.font.SysFont('comicsans', 60)
 
 #Images
 
@@ -36,6 +38,8 @@ for i in range(7):
 
 #game variable
 hangman_status = 0
+word = "HELLO"
+guessed = []
 
 #color
 WHITE = (255,255,255)
@@ -54,13 +58,27 @@ run = True
 def draw():
 	win.fill(WHITE)  
 
+	#draw word
+
+	display_word = ""
+	for letter in word:
+		if letter in guessed:
+			display_word += letter + " "
+		else:
+			display_word += "_ "
+	text = WORD_FONT.render(display_word, 1, BLACK)
+	win.blit(text,(400, 200))
+
+
+	
 	#draw buttons
+
 	for letter in letters:
 		x, y, ltr, visible = letter
 		if visible:
 			pygame.draw.circle(win, BLACK, (x, y),RADIUS, 3)
 			text = LETTER_FONT.render(ltr, 1, BLACK)
-			win.blit(text, (x - text.get_width()/2, y - text.get_height()/2))
+			win.blit(text, (x - text.get_height() / 2, y - text.get_height()/2))
 
 	
 	win.blit(images[hangman_status],(150,100))
@@ -85,6 +103,24 @@ while run:
 					dis = math.sqrt((x - m_x)**2 + (y - m_y)**2)
 					if dis < RADIUS:
 						letter[3] = False
+						guessed.append(ltr)
+						if ltr not in word:
+							hangman_status += 1
+
+#	won = True
+#	for letter in word:
+#		if letter in guessed:
+#			won = False
+#			break
+#	if won:
+#		print("Won")
+#		break
+
+#	if hangman_status == 6:
+#		print("Lost")
+#		break		
+			
+							
 
 
 
